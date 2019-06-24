@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'internship',
 ]
 
 MIDDLEWARE = [
@@ -86,7 +87,6 @@ DATABASES = {
 }
 
 
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -119,7 +119,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-## restframework django 
+# restframework django
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

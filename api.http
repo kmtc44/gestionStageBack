@@ -1,0 +1,19 @@
+GET http://localhost:8000/internship/enterprise
+
+###
+GET http://localhost:8000/internship/enterprise/1
+
+###
+
+POST http://localhost:8000/internship/enterprise/
+Content-Type: application/json
+
+{
+    "name":"Getrans",
+    "field":"Genie Civil",
+    "email":"getran@getran.com",
+    "website":"http://groupegetran.com/",
+    "address":"Mermoz-Pyrotechnie Lot 46 DAKAR.BP 16 482 Dakar-Fann Dakar, Rep du Sénégal",
+    "phone":" 338259687",
+    "leader_name":"Mar Thiam "
+}
