@@ -15,10 +15,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email')
-
+        fields = ('id', 'username', 'email', 'student')
 
 # Register Serializer
+
+
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -58,7 +59,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
+    # user = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = Teacher
@@ -80,3 +81,13 @@ class PromotionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promotion
         fields = ('id', 'name', 'students')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    student = StudentSerializer(many=False, read_only=True)
+    teacher = TeacherSerializer(many=False, read_only=True)
+    framer = FramerSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'student', 'teacher', 'framer')

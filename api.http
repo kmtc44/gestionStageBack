@@ -80,11 +80,11 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8000/auth/users
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token 7cb4b3f5d1be5703fb83585d882491dba931b71f96327629c52492975b69030c
 ###
 
 GET http://localhost:8000/auth/user
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token 7cb4b3f5d1be5703fb83585d882491dba931b71f96327629c52492975b69030c
 ###
 
 POST http://localhost:8000/auth/logout
