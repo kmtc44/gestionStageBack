@@ -8,7 +8,7 @@ GET http://localhost:8000/internship/enterprise/1
 
 POST http://localhost:8000/internship/enterprise/
 Content-Type: application/json
-Authorization: Token 2b178b257b45d4c42d876c8a12037ba59be74b92af9fc8cc2130516cfd9065cb
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 
 {
     "name":"Getrans",
@@ -43,20 +43,21 @@ Content-Type: application/json
 POST  http://localhost:8000/auth/register
 Content-Type: application/json 
 
+
 {
-    "username":"kaire32",
-    "email":"morkaa@kaire.fr",
+    "username":"kairemo",
+    "email":"kairemor@gmail.fr",
     "password":"kmtc44",
     "status":"student",
-    "promotion":"44",
     "firstname":"mor",
     "lastname":"kaire",
-    "phone" : "775434323",
+    "phone":"773444534",
     "department":"GIT",
-    "classe":"DIC1"
+    "classe":"DIC1",
+    "promotion":"44"
 }
-### 
 
+###
 POST  http://localhost:8000/auth/register
 Content-Type: application/json 
 
@@ -80,11 +81,11 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8000/auth/users
-Authorization: Token 7cb4b3f5d1be5703fb83585d882491dba931b71f96327629c52492975b69030c
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 ###
 
 GET http://localhost:8000/auth/user
-Authorization: Token 7cb4b3f5d1be5703fb83585d882491dba931b71f96327629c52492975b69030c
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 ###
 
 POST http://localhost:8000/auth/logout
@@ -92,21 +93,33 @@ Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587
 ###
 
 GET http://localhost:8000/students
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 
 ###
 
 GET http://localhost:8000/teachers
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 
 ###
 
 GET http://localhost:8000/framers
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 
 ###
 
 GET http://localhost:8000/promos
-Authorization: Token c46b71e4ae395b7825889a49b731a644fc05d331b99bc9a3acb47c640e2ee346
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
 
 ###
+GET http://localhost:8000/department
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+###
+POST http://localhost:8000/department
+Content-Type: application/json
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+{
+    "name": "GC"
+}
+###
+

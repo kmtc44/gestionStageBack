@@ -1,6 +1,7 @@
 from django.urls import include, path
 from knox import views as knox_views
 
+from accounts.api import DepartmentAPI
 
 from .api import (FramerAPI, LoginAPI, PromotionAPI, RegisterAPI, StudentAPI,
                   TeacherAPI, UserAPI, UsersAPI)
@@ -16,5 +17,6 @@ urlpatterns = [
     path('teachers', TeacherAPI.as_view()),
     path('framers', FramerAPI.as_view()),
     path('promos', PromotionAPI.as_view()),
+    path('department', DepartmentAPI.as_view()),
 
 ]

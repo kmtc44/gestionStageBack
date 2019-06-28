@@ -3,6 +3,9 @@ from knox.models import AuthToken
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
 
+from accounts.models import Department
+from accounts.serializers import DepartmentSerializer
+
 from .models import Framer, Promotion, Student, Teacher
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
@@ -20,25 +23,29 @@ class RegisterAPI(generics.GenericAPIView):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
 
         first_name = request.data['firstname']
         last_name = request.data['lastname']
         phone = request.data["phone"]
         if request.data['status'] == 'student':
-            department = request.data['department']
+            department_name = request.data['department']
+            department = Department.objects.get(name=department_name)
             classe = request.data['classe']
             promo = Promotion.objects.create(
                 name=request.data['promotion']+"eme promo")
+            user = serializer.save()
             Student.objects.create(user=user, promotion=promo, first_name=first_name,
                                    last_name=last_name, department=department, classe=classe, phone=phone)
 
         elif request.data['status'] == 'teacher':
-            department = request.data['department']
+            department_name = request.data['department']
+            department = Department.objects.get(name=department_name)
+            user = serializer.save()
             Teacher.objects.create(user=user, first_name=first_name,
                                    last_name=last_name, department=department, phone=phone)
 
         elif request.data['status'] == 'framer':
+            user = serializer.save()
             Framer.objects.create(user=user, first_name=first_name,
                                   last_name=last_name, phone=phone)
 
@@ -84,6 +91,14 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class DepartmentAPI(generics.ListCreateAPIView):
+    serializer_class = DepartmentSerializer
+    queryset = Department.objects.all()
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
 
 
 class StudentAPI(generics.ListAPIView):

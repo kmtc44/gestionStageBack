@@ -6,7 +6,7 @@ from rest_framework.serializers import ModelSerializer
 
 from internship.serializers import EnterpriseSerializers
 
-from .models import Framer, Promotion, Student, Teacher
+from .models import Framer, Promotion, Student, Teacher, Department
 
 # User serializer
 
@@ -49,9 +49,16 @@ class LoginSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Incorrect credentials")
 
 
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     enterprise = EnterpriseSerializers(many=False, read_only=True)
+    department = DepartmentSerializer(many=False, read_only=True)
 
     class Meta:
         model = Student
@@ -60,6 +67,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 class TeacherSerializer(serializers.ModelSerializer):
     # user = UserSerializer(many=False, read_only=True)
+    department = DepartmentSerializer(many=False, read_only=True)
 
     class Meta:
         model = Teacher
