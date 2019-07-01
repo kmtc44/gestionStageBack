@@ -1,0 +1,125 @@
+GET http://localhost:8000/internship/enterprise
+Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587cb1a3
+
+###
+GET http://localhost:8000/internship/enterprise/1
+
+###
+
+POST http://localhost:8000/internship/enterprise/
+Content-Type: application/json
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+{
+    "name":"Getrans",
+    "field":"Genie Civil",
+    "email":"getran@getran.com",
+    "website":"http://groupegetran.com/",
+    "address":"Mermoz-Pyrotechnie Lot 46 DAKAR.BP 16 482 Dakar-Fann Dakar, Rep du Sénégal",
+    "phone":" 338259687",
+    "leader_name":"Mar Thiam "
+}
+
+### 
+DELETE http://localhost:8000/internship/enterprise/4/
+Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587cb1a3
+###
+
+POST  http://localhost:8000/auth/register
+Content-Type: application/json 
+
+{
+    "username":"guisse1",
+    "email":"guisse@gnmail.fr",
+    "password":"kmtc44",
+    "status":"teacher",
+    "firstname":"Guisee",
+    "lastname":"Abdou",
+    "department":"GIT",
+    "phone": "774304543"
+}
+### 
+
+POST  http://localhost:8000/auth/register
+Content-Type: application/json 
+
+
+{
+    "username":"kairemo",
+    "email":"kairemor@gmail.fr",
+    "password":"kmtc44",
+    "status":"student",
+    "firstname":"mor",
+    "lastname":"kaire",
+    "phone":"773444534",
+    "department":"GIT",
+    "classe":"DIC1",
+    "promotion":"44"
+}
+
+###
+POST  http://localhost:8000/auth/register
+Content-Type: application/json 
+
+{
+    "username":"secka",
+    "email":"seck@kaire.fr",
+    "password":"kmtc44",
+    "status":"framer",
+    "firstname":"lamine",
+    "lastname":"seck",
+    "phone":"773444534"
+}
+### 
+POST  http://localhost:8000/auth/login
+Content-Type: application/json 
+
+{
+    "username":"kairemor",
+    "password":"kmtc"
+}
+###
+
+GET http://localhost:8000/auth/users
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+###
+
+GET http://localhost:8000/auth/user
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+###
+
+POST http://localhost:8000/auth/logout
+Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587cb1a3
+###
+
+GET http://localhost:8000/students
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+###
+
+GET http://localhost:8000/teachers
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+###
+
+GET http://localhost:8000/framers
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+###
+
+GET http://localhost:8000/promos
+Authorization: Token  e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+###
+GET http://localhost:8000/department
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+###
+POST http://localhost:8000/department
+Content-Type: application/json
+Authorization: Token e2ea98332630ecacab43d8b04bfd7f0c5cc128c5609f82c7822cfc9b755a744a
+
+{
+    "name": "GC"
+}
+###
+
