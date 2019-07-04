@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework.parsers import FileUploadParser
 from knox.models import AuthToken
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
@@ -14,6 +15,7 @@ from .serializers import (FramerSerializer, LoginSerializer,
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    parser_class = (FileUploadParser,)
     queryset = User.objects.all()
     permission_classes = [
         permissions.AllowAny
@@ -27,6 +29,19 @@ class RegisterAPI(generics.GenericAPIView):
         first_name = request.data['firstname']
         last_name = request.data['lastname']
         phone = request.data["phone"]
+        email = request.data["email"]
+        try:
+            User.objects.filter(email=email)
+            return Response({
+                "error": "email deja utilise"
+            })
+        except:
+            pass
+        image = ''
+        try:
+            image = request.data["image"]
+        except:
+            pass
         if request.data['status'] == 'student':
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
@@ -35,19 +50,19 @@ class RegisterAPI(generics.GenericAPIView):
                 name=request.data['promotion']+"eme promo")
             user = serializer.save()
             Student.objects.create(user=user, promotion=promo, first_name=first_name,
-                                   last_name=last_name, department=department, classe=classe, phone=phone)
+                                   last_name=last_name, department=department, classe=classe, phone=phone, image=image)
 
         elif request.data['status'] == 'teacher':
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
             user = serializer.save()
             Teacher.objects.create(user=user, first_name=first_name,
-                                   last_name=last_name, department=department, phone=phone)
+                                   last_name=last_name, department=department, phone=phone, image=image)
 
         elif request.data['status'] == 'framer':
             user = serializer.save()
             Framer.objects.create(user=user, first_name=first_name,
-                                  last_name=last_name, phone=phone)
+                                  last_name=last_name, phone=phone, image=image)
 
         user.save()
         print("Authtoken values : ", AuthToken.objects.create(user))

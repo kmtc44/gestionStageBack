@@ -38,6 +38,7 @@ class Department(models.Model):
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, default="")
+    image = models.ImageField(upload_to='profiles/', null=True)
     last_name = models.CharField(max_length=50, default="")
     promotion = models.ForeignKey(
         Promotion, on_delete=models.CASCADE, related_name="students")
@@ -56,6 +57,7 @@ class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, default="")
     last_name = models.CharField(max_length=50, default="")
+    image = models.ImageField(upload_to='profiles/', null=True)
     phone = models.IntegerField(default=0)
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, default=1)
@@ -70,6 +72,7 @@ class Teacher(models.Model):
 class Framer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, default="")
+    image = models.ImageField(upload_to='profiles/', null=True)
     last_name = models.CharField(max_length=50, default="")
     phone = models.IntegerField()
     enterprise = models.ForeignKey(
