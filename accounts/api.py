@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 
-from .models import Framer, Promotion, Student, Teacher
+from .models import Framer, Promotion, Student, Teacher, Classroom
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer)
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -31,7 +31,7 @@ class RegisterAPI(generics.GenericAPIView):
         phone = request.data["phone"]
         email = request.data["email"]
         try:
-            User.objects.filter(email=email)
+            User.objects.get(email=email)
             return Response({
                 "error": "email deja utilise"
             })
@@ -45,12 +45,12 @@ class RegisterAPI(generics.GenericAPIView):
         if request.data['status'] == 'student':
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
-            classe = request.data['classe']
-            promo = Promotion.objects.create(
-                name=request.data['promotion']+"eme promo")
+            classroom = Classroom.objects.get(name=request.data['classe'])
+            promo = Promotion.objects.get(
+                name=request.data['promotion'])
             user = serializer.save()
             Student.objects.create(user=user, promotion=promo, first_name=first_name,
-                                   last_name=last_name, department=department, classe=classe, phone=phone, image=image)
+                                   last_name=last_name, department=department, classroom=classroom, phone=phone, image=image)
 
         elif request.data['status'] == 'teacher':
             department_name = request.data['department']
@@ -116,7 +116,7 @@ class DepartmentAPI(generics.ListCreateAPIView):
     ]
 
 
-class StudentAPI(generics.ListAPIView):
+class StudentAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -140,9 +140,17 @@ class FramerAPI(generics.ListAPIView):
     serializer_class = FramerSerializer
 
 
-class PromotionAPI(generics.ListAPIView):
+class PromotionAPI(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
     queryset = Promotion.objects.all()
     serializer_class = PromotionSerializer
+
+
+class ClassroomAPI(generics.ListCreateAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    queryset = Classroom.objects.all()
+    serializer_class = ClassroomSerializer

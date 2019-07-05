@@ -4,9 +4,9 @@ from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 
 
-from internship.serializers import EnterpriseSerializers
+# from internship.serializers import EnterpriseSerializers
 
-from .models import Framer, Promotion, Student, Teacher, Department
+from .models import Framer, Promotion, Student, Teacher, Department, Classroom
 
 # User serializer
 
@@ -57,7 +57,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 
 class StudentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
-    enterprise = EnterpriseSerializers(many=False, read_only=True)
+    # enterprise = EnterpriseSerializers(many=False, read_only=True)
     department = DepartmentSerializer(many=False, read_only=True)
 
     class Meta:
@@ -76,7 +76,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 class FramerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
-    enterprise = EnterpriseSerializers(many=False, read_only=True)
+    # enterprise = EnterpriseSerializers(many=False, read_only=True)
 
     class Meta:
         model = Framer
@@ -99,3 +99,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'email', 'student', 'teacher', 'framer')
+
+
+class ClassroomSerializer(serializers.ModelSerializer):
+    students = StudentSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Classroom
+        fields = ('id', 'name', 'students')

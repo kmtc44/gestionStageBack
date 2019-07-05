@@ -1,6 +1,12 @@
 from django.db import models
 
-# Create your models here.
+
+CONVENTION_STATE = (
+    ('R', 'Convention en cours'),
+    ('S', 'Convention suspendue'),
+    ('E', 'Convention expiree')
+)
+
 
 class Enterprise(models.Model):
     name = models.CharField(max_length=50, default="")
@@ -11,6 +17,19 @@ class Enterprise(models.Model):
     phone = models.IntegerField()
     leader_name = models.CharField(max_length=50, default="")
     is_partner = models.BooleanField(default=False)
+    add_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+
+
+class Convention(models.Model):
+    title = models.CharField(max_length=60, default="")
+    enterprise = models.OneToOneField(
+        Enterprise, on_delete=models.CASCADE)
+    life_time = models.IntegerField(default=0)
+    state = models.CharField(max_length=50, choices=CONVENTION_STATE)
+    starting_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
