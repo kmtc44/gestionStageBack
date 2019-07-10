@@ -127,15 +127,14 @@ class StudentAPI(viewsets.ModelViewSet):
     parser_class = (FileUploadParser,)
 
     def update(self, request, pk):
-        skills_id = request.data['skills']
-        skills = []
-        for id in skills_id:
-            skills.append(Skill.objects.get(id=id))
-
-        print(skills)
-        student = Student.objects.get(id=pk) 
-
-        student.skills.add(*skills)
+        student = Student.objects.get(id=pk)
+        if 'skills'  in request.data:
+            skills_id = request.data['skills']
+            skills = []
+            for id in skills_id:
+                skills.append(Skill.objects.get(id=id))
+             
+            student.skills.add(*skills)
 
         if 'first_name' in request.data:
             student.first_name = request.data["first_name"]
