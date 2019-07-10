@@ -5,10 +5,18 @@ from rest_framework.serializers import ModelSerializer
 
 
 # from internship.serializers import EnterpriseSerializers
+from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Skill
+from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill
+
 
 # User serializer
+
+
+class EnterpriseSerializers(serializers.ModelSerializer):
+    class Meta:
+        model = Enterprise
+        fields = '__all__'
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -63,7 +71,7 @@ class SkillSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
     user = UserSerializer(many=False, read_only=True)
-    # enterprise = EnterpriseSerializers(many=False, read_only=True)
+    enterprise = EnterpriseSerializers(many=False, read_only=True)
     department = DepartmentSerializer(many=False, read_only=True)
 
     class Meta:
@@ -115,4 +123,17 @@ class ClassroomSerializer(serializers.ModelSerializer):
         model = Classroom
         fields = ('id', 'name', 'students')
 
+
+class TaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = '__all__'
 
