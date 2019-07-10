@@ -59,7 +59,7 @@ class Student(models.Model):
     birthday = models.DateField(null=True)
 
     def __str__(self):
-        return self.status + " : =>  " + self.first_name + " " + self.last_name + " " + self.classe
+        return self.status + " : =>  " + self.first_name + " " + self.last_name
 
 
 class Teacher(models.Model):
@@ -92,11 +92,30 @@ class Framer(models.Model):
         return self.status + " : =>  " + self.first_name + " " + self.last_name
 
 
+class Project(models.Model):
+    name = models.CharField(max_length=100, default="")
+    description = models.CharField(max_length=200, default="")
+    aim = models.CharField(max_length=300, default="")
+    framer = models.ForeignKey(
+        Framer, related_name="my_projects", on_delete=models.CASCADE, null=False)
+    enterprise = models.ForeignKey(
+        Enterprise, related_name="projects", on_delete=models.CASCADE)
+    students = models.ManyToManyField(Student, related_name="projects")
+    starting_time = models.DateTimeField(null=True)
+    finish_time = models.DateTimeField(null=True)
+    create_at = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Task(models.Model):
     title = models.CharField(max_length=100, default="")
     description = models.TextField()
     framer = models.ForeignKey(
         Framer, related_name="my_tasks", on_delete=models.CASCADE, null=False)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, null=True, related_name="tasks")
     students = models.ManyToManyField(Student, related_name="my_tasks")
     starting_time = models.DateTimeField(null=True)
     finish_time = models.DateTimeField(null=True)
