@@ -43,7 +43,6 @@ class Classroom(models.Model):
 class Skill(models.Model):
     name = models.CharField(max_length=50, default="")
     
-
     def __str__(self):
         return self.name 
 
@@ -62,12 +61,12 @@ class Student(models.Model):
     status = models.CharField(max_length=50, default="student")
     enterprise = models.ForeignKey(
         Enterprise, related_name="students", on_delete=models.CASCADE, null=True)
-<<<<<<< HEAD
+
     skills = models.ManyToManyField(Skill, related_name="students")
-=======
+
     birthday = models.DateField(null=True)
 
->>>>>>> c90a2a2441008c91881b339c74fcabb133d10960
+
     def __str__(self):
         return self.status + " : =>  " + self.first_name + " " + self.last_name
 
@@ -134,13 +133,3 @@ class Task(models.Model):
     def __str__(self):
         return self.title + ":  " + self.description
 
-<<<<<<< HEAD
-=======
-
-class Skill(models.Model):
-    name = models.CharField(max_length=50, default="")
-    students = models.ManyToManyField(Student, related_name="my_skills")
-
-    def __str__(self):
-        return self.name
->>>>>>> c90a2a2441008c91881b339c74fcabb133d10960

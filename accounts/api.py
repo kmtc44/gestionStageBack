@@ -7,17 +7,11 @@ from rest_framework.response import Response
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 
-<<<<<<< HEAD
-from .models import Framer, Promotion, Student, Teacher, Classroom, Skill
+from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project, Skill
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, SkillSerializer)
-=======
-from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project
-from .serializers import (FramerSerializer, LoginSerializer,
-                          PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, ProjectSerializer)
->>>>>>> c90a2a2441008c91881b339c74fcabb133d10960
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, SkillSerializer, ProjectSerializer)
+
 
 
 class RegisterAPI(generics.GenericAPIView):
