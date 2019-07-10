@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from rest_framework.parsers import FileUploadParser
 from knox.models import AuthToken
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
@@ -6,14 +7,15 @@ from rest_framework.response import Response
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 
-from .models import Framer, Promotion, Student, Teacher
+from .models import Framer, Promotion, Student, Teacher, Classroom
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer)
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer)
 
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
+    parser_class = (FileUploadParser,)
     queryset = User.objects.all()
     permission_classes = [
         permissions.AllowAny
@@ -27,27 +29,40 @@ class RegisterAPI(generics.GenericAPIView):
         first_name = request.data['firstname']
         last_name = request.data['lastname']
         phone = request.data["phone"]
+        email = request.data["email"]
+        try:
+            User.objects.get(email=email)
+            return Response({
+                "error": "email deja utilise"
+            })
+        except:
+            pass
+        image = ''
+        try:
+            image = request.data["image"]
+        except:
+            pass
         if request.data['status'] == 'student':
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
-            classe = request.data['classe']
-            promo = Promotion.objects.create(
-                name=request.data['promotion']+"eme promo")
+            classroom = Classroom.objects.get(name=request.data['classe'])
+            promo = Promotion.objects.get(
+                name=request.data['promotion'])
             user = serializer.save()
             Student.objects.create(user=user, promotion=promo, first_name=first_name,
-                                   last_name=last_name, department=department, classe=classe, phone=phone)
+                                   last_name=last_name, department=department, classroom=classroom, phone=phone, image=image)
 
         elif request.data['status'] == 'teacher':
             department_name = request.data['department']
             department = Department.objects.get(name=department_name)
             user = serializer.save()
             Teacher.objects.create(user=user, first_name=first_name,
-                                   last_name=last_name, department=department, phone=phone)
+                                   last_name=last_name, department=department, phone=phone, image=image)
 
         elif request.data['status'] == 'framer':
             user = serializer.save()
             Framer.objects.create(user=user, first_name=first_name,
-                                  last_name=last_name, phone=phone)
+                                  last_name=last_name, phone=phone, image=image)
 
         user.save()
         print("Authtoken values : ", AuthToken.objects.create(user))
@@ -101,7 +116,7 @@ class DepartmentAPI(generics.ListCreateAPIView):
     ]
 
 
-class StudentAPI(generics.ListAPIView):
+class StudentAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -125,9 +140,17 @@ class FramerAPI(generics.ListAPIView):
     serializer_class = FramerSerializer
 
 
-class PromotionAPI(generics.ListAPIView):
+class PromotionAPI(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
     queryset = Promotion.objects.all()
     serializer_class = PromotionSerializer
+
+
+class ClassroomAPI(generics.ListCreateAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    queryset = Classroom.objects.all()
+    serializer_class = ClassroomSerializer
