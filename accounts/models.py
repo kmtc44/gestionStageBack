@@ -103,3 +103,10 @@ class Task(models.Model):
 
     def __str__(self):
         return self.title + ":  " + self.description
+
+class Skill(models.Model):
+    name = models.CharField(max_length=50, default="")
+    students = models.ManyToManyField(Student, related_name="my_skills")
+
+    def __str__(self):
+        return self.name 
