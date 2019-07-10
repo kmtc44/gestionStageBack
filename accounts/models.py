@@ -40,6 +40,12 @@ class Classroom(models.Model):
     def __str__(self):
         return "classe de  : " + str(self.name)
 
+class Skill(models.Model):
+    name = models.CharField(max_length=50, default="")
+    
+
+    def __str__(self):
+        return self.name 
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,7 +62,7 @@ class Student(models.Model):
     status = models.CharField(max_length=50, default="student")
     enterprise = models.ForeignKey(
         Enterprise, related_name="students", on_delete=models.CASCADE, null=True)
-
+    skills = models.ManyToManyField(Skill, related_name="students")
     def __str__(self):
         return self.status + " : =>  " + self.first_name + " " + self.last_name + " " + self.classe
 
@@ -104,9 +110,3 @@ class Task(models.Model):
     def __str__(self):
         return self.title + ":  " + self.description
 
-class Skill(models.Model):
-    name = models.CharField(max_length=50, default="")
-    students = models.ManyToManyField(Student, related_name="my_skills")
-
-    def __str__(self):
-        return self.name 

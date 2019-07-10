@@ -1,5 +1,5 @@
 from .api import (FramerAPI, LoginAPI, PromotionAPI, RegisterAPI, StudentAPI,
-                  TeacherAPI, UserAPI, UsersAPI, ClassroomAPI)
+                  TeacherAPI, UserAPI, UsersAPI, ClassroomAPI, SkillViewSet)
 from accounts.api import DepartmentAPI
 from django.urls import include, path
 from knox import views as knox_views
@@ -7,6 +7,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('students', StudentAPI, 'student')
+router.register('skills',SkillViewSet , 'skills')
 
 
 urlpatterns = [

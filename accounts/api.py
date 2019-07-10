@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 
-from .models import Framer, Promotion, Student, Teacher, Classroom
+from .models import Framer, Promotion, Student, Teacher, Classroom, Skill
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer)
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, SkillSerializer)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -122,6 +122,32 @@ class StudentAPI(viewsets.ModelViewSet):
     ]
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    parser_class = (FileUploadParser,)
+
+    def update(self, request, pk):
+        skills_id = request.data['skills']
+        skills = []
+        for id in skills_id:
+            skills.append(Skill.objects.get(id=id))
+
+        print(skills)
+        student = Student.objects.get(id=pk) 
+
+        student.skills.add(*skills)
+
+        if 'first_name' in request.data:
+            student.first_name = request.data["first_name"]
+        if 'last_name' in request.data:
+            student.last_name = request.data["last_name"]
+        if 'image' in request.data:
+            student.image = request.data['image']
+        if 'phone' in request.data:
+            student.phone = request.data["phone"]
+        
+        student.save()
+
+        return Response(StudentSerializer(student).data)
+
 
 
 class TeacherAPI(generics.ListAPIView):
@@ -154,3 +180,7 @@ class ClassroomAPI(generics.ListCreateAPIView):
     ]
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
+
+class SkillViewSet(viewsets.ModelViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
