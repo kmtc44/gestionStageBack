@@ -7,7 +7,7 @@ from rest_framework.serializers import ModelSerializer
 # from internship.serializers import EnterpriseSerializers
 from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Department, Classroom
+from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project
 
 # User serializer
 
@@ -114,3 +114,17 @@ class ClassroomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Classroom
         fields = ('id', 'name', 'students')
+
+
+class TaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = '__all__'
+
+
+class ProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = '__all__'

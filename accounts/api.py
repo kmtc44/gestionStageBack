@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 
-from .models import Framer, Promotion, Student, Teacher, Classroom
+from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer)
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, ProjectSerializer)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -156,3 +156,12 @@ class ClassroomAPI(viewsets.ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
 
+
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
