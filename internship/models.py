@@ -14,6 +14,7 @@ class Enterprise(models.Model):
     email = models.EmailField(max_length=50, default="")
     website = models.CharField(max_length=50, default="")
     address = models.CharField(max_length=100, default="")
+    logo = models.ImageField(upload_to="logo_enterprise", null=True)
     phone = models.IntegerField()
     leader_name = models.CharField(max_length=50, default="")
     is_partner = models.BooleanField(default=False)
