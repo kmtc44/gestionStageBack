@@ -7,6 +7,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('students', StudentAPI, 'student')
+router.register('classroom', ClassroomAPI, 'classroom')
 
 
 urlpatterns = [
@@ -20,5 +21,5 @@ urlpatterns = [
     path('framers', FramerAPI.as_view()),
     path('promos', PromotionAPI.as_view()),
     path('department', DepartmentAPI.as_view()),
-    path('classroom', ClassroomAPI.as_view()),
+    # path('classroom', ClassroomAPI.as_view()),
 ] + router.urls

@@ -44,13 +44,14 @@ class RegisterAPI(generics.GenericAPIView):
             pass
         if request.data['status'] == 'student':
             department_name = request.data['department']
+            birthday = request.data['birthday']
             department = Department.objects.get(name=department_name)
             classroom = Classroom.objects.get(name=request.data['classe'])
             promo = Promotion.objects.get(
                 name=request.data['promotion'])
             user = serializer.save()
             Student.objects.create(user=user, promotion=promo, first_name=first_name,
-                                   last_name=last_name, department=department, classroom=classroom, phone=phone, image=image)
+                                   last_name=last_name, department=department, classroom=classroom, phone=phone, image=image, birthday=birthday)
 
         elif request.data['status'] == 'teacher':
             department_name = request.data['department']
@@ -148,9 +149,10 @@ class PromotionAPI(generics.ListCreateAPIView):
     serializer_class = PromotionSerializer
 
 
-class ClassroomAPI(generics.ListCreateAPIView):
+class ClassroomAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
+

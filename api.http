@@ -1,46 +1,58 @@
 GET http://localhost:8000/internship/enterprise
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
 GET http://localhost:8000/internship/enterprise/5
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
+GET http://localhost:8000/internship/enterprise/partner
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
+###
+GET http://localhost:8000/internship/enterprise/potential
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
+
+###
+GET http://localhost:8000/internship/enterprise/potential
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
+
+###
 POST http://localhost:8000/internship/enterprise/
 Content-Type: application/json
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 {
-    "name":"Getrans",
-    "field":"Genie Civil",
-    "email":"getran@getran.com",
-    "website":"http://groupegetran.com/",
+    "name":"Gainde 2000",
+    "field":"Informatique Telecom",
+    "email":"hgainde@gainde.com",
+    "website":"http://gainde2000.com/",
     "address":"Mermoz-Pyrotechnie Lot 46 DAKAR.BP 16 482 Dakar-Fann Dakar, Rep du Sénégal",
     "phone":" 338259687",
-    "leader_name":"Mar Thiam"
+    "leader_name":"Le con",
+    "is_partner" : true
 }
 ###
 
-PUT  http://localhost:8000/internship/enterprise/5/
+PUT  http://localhost:8000/internship/enterprise/2/
 Content-Type: application/json
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 {
-    "name":"Getrans",
-    "field":"Genie Civil",
-    "email":"getran@getran.com",
-    "website":"http://groupegetran.com/",
+    "name":"Gainde 2000",
+    "field":"Informatique Telecom",
+    "email":"hgainde@gainde.com",
+    "website":"http://gainde2000.com/",
     "address":"Mermoz-Pyrotechnie Lot 46 DAKAR.BP 16 482 Dakar-Fann Dakar, Rep du Sénégal",
     "phone":" 338259687",
-    "leader_name":"MMou Thiam",
-    "students":[13 ,14]
+    "leader_name":"Le con",
+    "is_partner" : true,
+    "students":[5 ,6]
 }
-
 
 ### 
 DELETE http://localhost:8000/internship/enterprise/4/
-Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587cb1a3
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
 
 POST  http://localhost:8000/auth/register
@@ -62,8 +74,8 @@ POST  http://localhost:8000/auth/register
 Content-Type: application/json 
 
 {
-    "username":"mouhamadou",
-    "email":"kairemor@gmail.com",
+    "username":"modou1",
+    "email":"modou1@gmail.com",
     "password":"kmtc44",
     "status":"student",
     "firstname":"mor",
@@ -71,7 +83,8 @@ Content-Type: application/json
     "phone":"773444534",
     "department":"GIT",
     "classe":"DIC3",
-    "promotion":"42"
+    "promotion":"44",
+    "birthday":"1996-08-08"
 }
 
 ###
@@ -93,30 +106,30 @@ POST  http://localhost:8000/auth/login
 Content-Type: application/json 
 
 {
-    "username":"kairemor",
+    "username":"kairemo",
     "password":"kmtc44"
 }
 ###
 
 GET http://localhost:8000/auth/users
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
 
 GET http://localhost:8000/auth/user
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
 
 POST http://localhost:8000/auth/logout
-Authorization: Token 3647eb869c57a900db44bb8761f02b3da37d3fc777db2126869f5dff587cb1a3
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
 
 GET http://localhost:8000/students
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
 PUT http://localhost:8000/students/12/
 Content-Type: application/json
-Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f28a54
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 {
     "username":"kairere",
@@ -135,47 +148,67 @@ Authorization: Token 5b39752241b67741345e6db1013cf82c28ef5aaed29d21e40fbe647ce5f
 ###
 
 GET http://localhost:8000/teachers
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
 
 GET http://localhost:8000/framers
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
 
 GET http://localhost:8000/promos
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 ###
 POST http://localhost:8000/promos
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 Content-Type: application/json
 
 {
-    "name":"47"
+    "name":"43"
 }
 ###
 GET http://localhost:8000/department
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
-GET http://localhost:8000/classroom
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+GET http://localhost:8000/classroom/1
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 ###
 POST http://localhost:8000/department
 Content-Type: application/json
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 {
-    "name": "GEM"
+    "name": "GC"
 }
 ###
 POST http://localhost:8000/classroom
 Content-Type: application/json
-Authorization: Token ad02b07613970a0aa02a25d07c22e7939de59770b98a0df779123b790f77a09a
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
 
 {
-    "name": "DIC3"
+    "name": "DIC1"
 }
 ###
 
+GET http://localhost:8000/internship/convention
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
+
+###
+
+DELETE  http://localhost:8000/internship/convention/6/
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
+
+###
+POST http://localhost:8000/internship/convention/
+Authorization: Token fa9a525f93e09308aa07b769865f06078053a981e40cabb9253f9a7e76ff8153
+Content-Type: application/json
+
+{
+    "title":"Partenariat avec Sonatel",
+    "enterprise":"2",
+    "life_time": "3",
+    "state":"R"
+}
+###
