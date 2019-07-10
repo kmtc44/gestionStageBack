@@ -56,7 +56,7 @@ class Student(models.Model):
     status = models.CharField(max_length=50, default="student")
     enterprise = models.ForeignKey(
         Enterprise, related_name="students", on_delete=models.CASCADE, null=True)
-    birthday = models.DateField(null=True )
+    birthday = models.DateField(null=True)
 
     def __str__(self):
         return self.status + " : =>  " + self.first_name + " " + self.last_name + " " + self.classe
@@ -105,3 +105,10 @@ class Task(models.Model):
     def __str__(self):
         return self.title + ":  " + self.description
 
+
+class Skill(models.Model):
+    name = models.CharField(max_length=50, default="")
+    students = models.ManyToManyField(Student, related_name="my_skills")
+
+    def __str__(self):
+        return self.name
