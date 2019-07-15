@@ -106,7 +106,7 @@ class Project(models.Model):
     description = models.CharField(max_length=200, default="")
     aim = models.CharField(max_length=300, default="")
     framer = models.ForeignKey(
-        Framer, related_name="my_projects", on_delete=models.CASCADE, null=False)
+        Framer, related_name="my_project", on_delete=models.CASCADE, null=False)
     enterprise = models.ForeignKey(
         Enterprise, related_name="projects", on_delete=models.CASCADE)
     students = models.ManyToManyField(Student, related_name="projects")
