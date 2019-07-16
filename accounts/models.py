@@ -17,6 +17,13 @@ CLASSES = (
     ('DIC2', 'Diplome d\'Ingenieur de Conception 2'),
     ('DIC3', 'Diplome d\'Ingenieur de Conception 3')
 )
+TASK_STATE = (
+    ('Created', 'Created'),
+    ('Doing', 'Doing'),
+    ('Done', 'Done'),
+    ('Reviewing', 'Reviewing'),
+    ('Finish', 'Finish')
+)
 
 
 class Promotion(models.Model):
@@ -40,6 +47,11 @@ class Classroom(models.Model):
     def __str__(self):
         return "classe de  : " + str(self.name)
 
+class Skill(models.Model):
+    name = models.CharField(max_length=50, default="")
+    
+    def __str__(self):
+        return self.name 
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -56,7 +68,11 @@ class Student(models.Model):
     status = models.CharField(max_length=50, default="student")
     enterprise = models.ForeignKey(
         Enterprise, related_name="students", on_delete=models.CASCADE, null=True)
+
+    skills = models.ManyToManyField(Skill, related_name="students")
+
     birthday = models.DateField(null=True)
+
 
     def __str__(self):
         return self.status + " : =>  " + self.first_name + " " + self.last_name
@@ -97,7 +113,7 @@ class Project(models.Model):
     description = models.CharField(max_length=200, default="")
     aim = models.CharField(max_length=300, default="")
     framer = models.ForeignKey(
-        Framer, related_name="my_projects", on_delete=models.CASCADE, null=False)
+        Framer, related_name="my_project", on_delete=models.CASCADE, null=False)
     enterprise = models.ForeignKey(
         Enterprise, related_name="projects", on_delete=models.CASCADE)
     students = models.ManyToManyField(Student, related_name="projects")
@@ -120,14 +136,8 @@ class Task(models.Model):
     starting_time = models.DateTimeField(null=True)
     finish_time = models.DateTimeField(null=True)
     create_at = models.DateTimeField(auto_now_add=True, null=True)
+    state = models.CharField(max_length=30, choices=TASK_STATE, default="Created")
 
     def __str__(self):
         return self.title + ":  " + self.description
 
-
-class Skill(models.Model):
-    name = models.CharField(max_length=50, default="")
-    students = models.ManyToManyField(Student, related_name="my_skills")
-
-    def __str__(self):
-        return self.name

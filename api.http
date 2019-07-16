@@ -1,29 +1,29 @@
 GET http://localhost:8000/internship/enterprise
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
-GET http://localhost:8000/internship/enterprise/5
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+GET http://localhost:8000/internship/enterprise/1
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 GET http://localhost:8000/internship/enterprise/partner
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 GET http://localhost:8000/internship/enterprise/potential
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 GET http://localhost:8000/internship/enterprise/potential
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 POST http://localhost:8000/internship/enterprise/
 Content-Type: application/json
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 {
-    "name":"Gainde 2000",
+    "name":"Gainde 3000",
     "field":"Informatique Telecom",
     "email":"hgainde@gainde.com",
     "website":"http://gainde2000.com/",
@@ -34,9 +34,9 @@ Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c38
 }
 ###
 
-PUT  http://localhost:8000/internship/enterprise/2/
+PUT  http://localhost:8000/internship/enterprise/1/
 Content-Type: application/json
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 {
     "name":"Gainde 2000",
@@ -52,7 +52,7 @@ Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c38
 
 ### 
 DELETE http://localhost:8000/internship/enterprise/4/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 
 POST  http://localhost:8000/auth/register
@@ -74,15 +74,15 @@ POST  http://localhost:8000/auth/register
 Content-Type: application/json 
 
 {
-    "username":"modou1",
-    "email":"modou1@gmail.com",
+    "username":"modou12",
+    "email":"modou13@gmail.com",
     "password":"kmtc44",
     "status":"student",
-    "firstname":"mor",
-    "lastname":"kaire",
+    "firstname":"moussa",
+    "lastname":"Dio",
     "phone":"773444534",
     "department":"GIT",
-    "classe":"DIC3",
+    "classe":"DIC1",
     "promotion":"44",
     "birthday":"1996-08-08"
 }
@@ -111,25 +111,31 @@ Content-Type: application/json
 }
 ###
 
+
+
 GET http://localhost:8000/auth/users
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 
 GET http://localhost:8000/auth/user
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 
 POST http://localhost:8000/auth/logout
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 
 GET http://localhost:8000/students
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
+
+###
+GET http://localhost:8000/students/1/
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 PUT http://localhost:8000/students/12/
 Content-Type: application/json
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 {
     "username":"kairere",
@@ -148,21 +154,21 @@ Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c38
 ###
 
 GET http://localhost:8000/teachers
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 
 GET http://localhost:8000/framers
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 
 GET http://localhost:8000/promos
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 POST http://localhost:8000/promos
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 Content-Type: application/json
 
 {
@@ -170,14 +176,14 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:8000/department
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 GET http://localhost:8000/classroom/1
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 ###
 POST http://localhost:8000/department
 Content-Type: application/json
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 {
     "name": "GC"
@@ -185,7 +191,7 @@ Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c38
 ###
 POST http://localhost:8000/classroom
 Content-Type: application/json
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 {
     "name": "DIC1"
@@ -193,16 +199,16 @@ Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c38
 ###
 
 GET http://localhost:8000/internship/convention
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 
 DELETE  http://localhost:8000/internship/convention/6/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 POST http://localhost:8000/internship/convention/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 Content-Type: application/json
 
 {
@@ -213,16 +219,16 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:8000/task/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 
-GET http://localhost:8000/project/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+GET http://localhost:8000/project/10
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 
 ###
 PUT http://localhost:8000/project/1/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 Content-Type: application/json
 
 {
@@ -235,11 +241,11 @@ Content-Type: application/json
 }
 ###
 POST http://localhost:8000/project/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 Content-Type: application/json
 
 {
-    "name":"Arrythmia classification des arythmia cardiaque",
+    "name":"Ok google alalysic ",
     "description":"une application permettant de classer les arythmie du coeur",
     "aim": "permettre au medecin de faire leur job plus convenablement",
     "enterprise":"3",
@@ -249,7 +255,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8000/task/
-Authorization: Token c55a80569d7478ef4db92dd32cb16644dab7b47a1660168450e587a5c386eea5
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
 Content-Type: application/json
 
 {
@@ -257,6 +263,25 @@ Content-Type: application/json
     "description":"Permet de faire des models pemettant de faire la predictions mots dire par notre bot",
     "framer":"1",
     "students":[1,2],
-    "project": "1"
+    # "project": "1",
+    "starting_time":"2019-07-15T08:00",
+    "finish_time" : "2019-07-20T19:00"
 }
+###
+
+GET http://localhost:8000/skills
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
+
+###
+POST http://localhost:8000/skills/
+Content-Type: application/json
+Authorization: Token 0b3b7c0f6a604cad59184eb1508f3c19777ec0a52633220417ae15edf5d019bd
+
+{
+    "name":"Python"
+}
+
+###
+GET http://localhost:8000/internship/enterprise/register
+
 ###
