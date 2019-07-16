@@ -33,14 +33,14 @@ class SkSerializer(serializers.ModelSerializer):
         model = Skill
         fields = ('id', 'name', 'students')
 
-# real serializer  that are used buy the api view to serve or receive data
-
-
 # serializer for the enterprise
 class EnterpriseSerializers(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
         fields = '__all__'
+# real serializer  that are used buy the api view to serve or receive data
+
+
 
 # User serializer
 
@@ -122,7 +122,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 class FramerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
-    # enterprise = EnterpriseSerializers(many=False, read_only=True)
+    enterprise = EnterpriseSerializers(many=False, read_only=True)
 
     class Meta:
         model = Framer
@@ -164,7 +164,7 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     students = SSerializer(many=True, read_only=True)
-
+    framer = FramerSerializer(many=False, read_only=True)
     class Meta:
         model = Project
         fields = '__all__'

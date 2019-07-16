@@ -63,8 +63,9 @@ class RegisterAPI(generics.GenericAPIView):
 
         elif request.data['status'] == 'framer':
             user = serializer.save()
+            enterprise = Enterprise.objects.get(id=request.data['enterprise'])
             Framer.objects.create(user=user, first_name=first_name,
-                                  last_name=last_name, phone=phone, image=image)
+                                  last_name=last_name, phone=phone, image=image, enterprise=enterprise)
 
         user.save()
         print("Authtoken values : ", AuthToken.objects.create(user))
@@ -108,6 +109,7 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
 
 
 class DepartmentAPI(generics.ListCreateAPIView):
@@ -170,7 +172,7 @@ class PromotionAPI(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    queryset = Promotion.objects.all()
+    queryset = Promotion.objects.all().order_by('-id')
     serializer_class = PromotionSerializer
 
 
@@ -183,17 +185,17 @@ class ClassroomAPI(viewsets.ModelViewSet):
 
 
 class SkillViewSet(viewsets.ModelViewSet):
-    queryset = Skill.objects.all()
+    queryset = Skill.objects.all().order_by('-id')
     serializer_class = SkillSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by('-id')
     serializer_class = TaskSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
 
     def create(self, request):
