@@ -6,12 +6,12 @@ from rest_framework.response import Response
 
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
+from internship.models import Enterprise
 
 from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project, Skill
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
                           StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, SkillSerializer, ProjectSerializer)
-
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -63,8 +63,9 @@ class RegisterAPI(generics.GenericAPIView):
 
         elif request.data['status'] == 'framer':
             user = serializer.save()
+            enterprise = Enterprise.objects.get(id=request.data['enterprise'])
             Framer.objects.create(user=user, first_name=first_name,
-                                  last_name=last_name, phone=phone, image=image)
+                                  last_name=last_name, phone=phone, image=image, enterprise=enterprise)
 
         user.save()
         print("Authtoken values : ", AuthToken.objects.create(user))
@@ -108,6 +109,7 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+    
 
 
 class DepartmentAPI(generics.ListCreateAPIView):
@@ -128,12 +130,12 @@ class StudentAPI(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         student = Student.objects.get(id=pk)
-        if 'skills'  in request.data:
+        if 'skills' in request.data:
             skills_id = request.data['skills']
             skills = []
             for id in skills_id:
                 skills.append(Skill.objects.get(id=id))
-             
+
             student.skills.add(*skills)
 
         if 'skill' in request.data:
@@ -151,17 +153,16 @@ class StudentAPI(viewsets.ModelViewSet):
                 student.image = request.data['image']
         if 'phone' in request.data:
             student.phone = request.data["phone"]
-        if 'gender' in request.data:
-            student.gender = request.data["gender"]
-        if 'socialStatus' in request.data:
-            student.socialStatus = request.data["socialStatus"]
-        if 'address' in request.data:
-            student.address = request.data["address"]
-        
-        student.save()
+
+        # if 'gender' in request.data:
+        #     student.gender = request.data["gender"]
+        # if 'socialStatus' in request.data:
+        #     student.socialStatus = request.data["socialStatus"]
+        # if 'address' in request.data:
+        #     student.address = request.data["address"]
+        # student.save()
 
         return Response(StudentSerializer(student).data)
-
 
 
 class TeacherAPI(generics.ListAPIView):
@@ -184,7 +185,7 @@ class PromotionAPI(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    queryset = Promotion.objects.all()
+    queryset = Promotion.objects.all().order_by('-id')
     serializer_class = PromotionSerializer
 
 
@@ -197,16 +198,31 @@ class ClassroomAPI(viewsets.ModelViewSet):
 
 
 class SkillViewSet(viewsets.ModelViewSet):
-    queryset = Skill.objects.all()
+    queryset = Skill.objects.all().order_by('-id')
     serializer_class = SkillSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = Task.objects.all().order_by('-id')
     serializer_class = TaskSerializer
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all()
+    queryset = Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
 
+    def create(self, request):
+        print(request.data)
+        name = request.data['name']
+        description = request.data['description']
+        aim = request.data['aim']
+        enterprise = Enterprise.objects.get(id=request.data['enterprise'])
+        framer = Framer.objects.get(id=request.data['framer'])
+        pro = Project.objects.create(
+            name=name, description=description, aim=aim, framer=framer, enterprise=enterprise)
+        pro.save()
+
+        for id in request.data['students']:
+            pro.students.add(Student.objects.get(id=id))
+
+        return Response(ProjectSerializer(pro).data)

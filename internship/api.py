@@ -17,13 +17,26 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 
     def update(self, request, pk):
         students_id = request.data['students']
+        enterprise = Enterprise.objects.get(id=pk)
         for student_id in students_id:
             student = Student.objects.get(id=student_id)
-            enterprise = Enterprise.objects.get(id=pk)
             student.enterprise = enterprise
             student.save()
 
+        if 'is_partner' in request.data:
+            enterprise.is_partner = request.data['is_partner']
+
+        enterprise.save()
+
         return Response(EnterpriseSerializers(enterprise).data)
+
+
+class EnterpriseGET(generics.ListAPIView):
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    queryset = Enterprise.objects.all().order_by('-id')
+    serializer_class = EnterpriseSerializers
 
 
 class EnterprisePartnerView(generics.ListAPIView):

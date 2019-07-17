@@ -10,13 +10,39 @@ from internship.models import Enterprise
 from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill
 
 
-# User serializer
+# serializer that are not use directy but allow inly for nested data
+
+# serializer for the  student in nested skills  or other
+class SSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
+# the serializer for nested project in the real student serializer
 
 
+class ProjSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Project
+        fields = ('id', 'name', 'description', 'aim')
+
+
+class SkSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Skill
+        fields = ('id', 'name', 'students')
+
+# serializer for the enterprise
 class EnterpriseSerializers(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
         fields = '__all__'
+# real serializer  that are used buy the api view to serve or receive data
+
+
+
+# User serializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -57,27 +83,32 @@ class LoginSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Incorrect credentials")
 
 
+# the department serializer for the different department or ginus in the school
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = '__all__'
 
 
+# serialzer for the skills of students and students that have a skill
 class SkillSerializer(serializers.ModelSerializer):
+    students = SSerializer(many=True, read_only=True)
+
     class Meta:
-        model = Skill 
-        fields = '__all__'
+        model = Skill
+        fields = ('id', 'name', 'students')
+
 
 class StudentSerializer(serializers.ModelSerializer):
-    skills = SkillSerializer(many=True, read_only=True)
+    skills = SkSerializer(many=True, read_only=True)
     user = UserSerializer(many=False, read_only=True)
     enterprise = EnterpriseSerializers(many=False, read_only=True)
     department = DepartmentSerializer(many=False, read_only=True)
+    projects = ProjSerializer(many=True, read_only=True)
 
     class Meta:
         model = Student
         fields = '__all__'
-
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -91,7 +122,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 class FramerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
-    # enterprise = EnterpriseSerializers(many=False, read_only=True)
+    enterprise = EnterpriseSerializers(many=False, read_only=True)
 
     class Meta:
         model = Framer
@@ -132,8 +163,8 @@ class TaskSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-
+    students = SSerializer(many=True, read_only=True)
+    framer = FramerSerializer(many=False, read_only=True)
     class Meta:
         model = Project
         fields = '__all__'
-

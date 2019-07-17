@@ -17,6 +17,13 @@ CLASSES = (
     ('DIC2', 'Diplome d\'Ingenieur de Conception 2'),
     ('DIC3', 'Diplome d\'Ingenieur de Conception 3')
 )
+TASK_STATE = (
+    ('Created', 'Created'),
+    ('Doing', 'Doing'),
+    ('Done', 'Done'),
+    ('Reviewing', 'Reviewing'),
+    ('Finish', 'Finish')
+)
 
 SocialStatus = (
         ('CSE', 'Célibataire sans enfants'),
@@ -121,7 +128,7 @@ class Project(models.Model):
     description = models.CharField(max_length=200, default="")
     aim = models.CharField(max_length=300, default="")
     framer = models.ForeignKey(
-        Framer, related_name="my_projects", on_delete=models.CASCADE, null=False)
+        Framer, related_name="my_project", on_delete=models.CASCADE, null=False)
     enterprise = models.ForeignKey(
         Enterprise, related_name="projects", on_delete=models.CASCADE)
     students = models.ManyToManyField(Student, related_name="projects")
@@ -144,6 +151,7 @@ class Task(models.Model):
     starting_time = models.DateTimeField(null=True)
     finish_time = models.DateTimeField(null=True)
     create_at = models.DateTimeField(auto_now_add=True, null=True)
+    state = models.CharField(max_length=30, choices=TASK_STATE, default="Created")
 
     def __str__(self):
         return self.title + ":  " + self.description
