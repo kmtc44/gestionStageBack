@@ -25,6 +25,17 @@ TASK_STATE = (
     ('Finish', 'Finish')
 )
 
+SocialStatus = (
+        ('CSE', 'Célibataire sans enfants'),
+        ('CAE', 'Célibataire avec enfants'),
+        ('MSE', 'Marié(e) sans enfants'),
+        ('MAE', 'Marié(e) avec enfants'),
+    )
+
+Genre=(
+        ('M', 'Masculin'),
+        ('F', 'Féminin'),
+    )
 
 class Promotion(models.Model):
     name = models.CharField(max_length=50, default="")
@@ -68,6 +79,10 @@ class Student(models.Model):
     status = models.CharField(max_length=50, default="student")
     enterprise = models.ForeignKey(
         Enterprise, related_name="students", on_delete=models.CASCADE, null=True)
+
+    socialStatus = models.CharField(max_length=50, default="")
+    address = models.CharField(max_length=50, default="")
+    gender = models.CharField(max_length=50, default="")
 
     skills = models.ManyToManyField(Skill, related_name="students")
 
