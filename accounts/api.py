@@ -136,14 +136,27 @@ class StudentAPI(viewsets.ModelViewSet):
              
             student.skills.add(*skills)
 
+        if 'skill' in request.data:
+            
+            skill_id = request.data['skill']
+            skill = Skill.objects.get(id=skill_id)
+            student.skills.remove(skill)
+
         if 'first_name' in request.data:
             student.first_name = request.data["first_name"]
         if 'last_name' in request.data:
             student.last_name = request.data["last_name"]
         if 'image' in request.data:
-            student.image = request.data['image']
+            if request.data['image'] != 'undefined':
+                student.image = request.data['image']
         if 'phone' in request.data:
             student.phone = request.data["phone"]
+        if 'gender' in request.data:
+            student.gender = request.data["gender"]
+        if 'socialStatus' in request.data:
+            student.socialStatus = request.data["socialStatus"]
+        if 'address' in request.data:
+            student.address = request.data["address"]
         
         student.save()
 
