@@ -18,7 +18,7 @@ CLASSES = (
     ('DIC3', 'Diplome d\'Ingenieur de Conception 3')
 )
 TASK_STATE = (
-    ('Created', 'Created'),
+    ('To Do', 'To Do'),
     ('Doing', 'Doing'),
     ('Done', 'Done'),
     ('Reviewing', 'Reviewing'),
@@ -136,7 +136,7 @@ class Task(models.Model):
     starting_time = models.DateTimeField(null=True)
     finish_time = models.DateTimeField(null=True)
     create_at = models.DateTimeField(auto_now_add=True, null=True)
-    state = models.CharField(max_length=30, choices=TASK_STATE, default="Created")
+    state = models.CharField(max_length=30, choices=TASK_STATE, default="To Do")
 
     def __str__(self):
         return self.title + ":  " + self.description

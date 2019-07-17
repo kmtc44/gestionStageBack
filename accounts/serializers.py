@@ -165,6 +165,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     students = SSerializer(many=True, read_only=True)
     framer = FramerSerializer(many=False, read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
     class Meta:
         model = Project
         fields = '__all__'
