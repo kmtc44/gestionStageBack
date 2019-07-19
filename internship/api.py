@@ -16,11 +16,20 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
     serializer_class = EnterpriseSerializers
 
     def update(self, request, pk):
-        students_id = request.data['students']
+
         enterprise = Enterprise.objects.get(id=pk)
-        for student_id in students_id:
-            student = Student.objects.get(id=student_id)
-            student.enterprise = enterprise
+        # when adding a list of student in a enterprise
+        if 'students' in request.data:
+            students_id = request.data['students']
+            for student_id in students_id:
+                student = Student.objects.get(id=student_id)
+                student.enterprise = enterprise
+                student.save()
+
+        # When removing one student in a enterprise
+        if 'student' in request.data:
+            student = Student.objects.get(id=request.data['student'])
+            student.enterprise = None
             student.save()
 
         if 'is_partner' in request.data:

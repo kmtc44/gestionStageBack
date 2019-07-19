@@ -34,12 +34,21 @@ class SkSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'students')
 
 # serializer for the enterprise
+
+
 class EnterpriseSerializers(serializers.ModelSerializer):
     class Meta:
         model = Enterprise
         fields = '__all__'
-# real serializer  that are used buy the api view to serve or receive data
+# classroom for student
 
+
+class CRSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Classroom
+        fields = ('id', 'name')
+# real serializer  that are used buy the api view to serve or receive data
 
 
 # User serializer
@@ -105,6 +114,7 @@ class StudentSerializer(serializers.ModelSerializer):
     enterprise = EnterpriseSerializers(many=False, read_only=True)
     department = DepartmentSerializer(many=False, read_only=True)
     projects = ProjSerializer(many=True, read_only=True)
+    classroom = CRSerializer(many=False, read_only=True)
 
     class Meta:
         model = Student
@@ -112,7 +122,7 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(many=False, read_only=True)
+    user = UserSerializer(many=False, read_only=True)
     department = DepartmentSerializer(many=False, read_only=True)
 
     class Meta:
@@ -156,6 +166,7 @@ class ClassroomSerializer(serializers.ModelSerializer):
 
 
 class TaskSerializer(serializers.ModelSerializer):
+    students = StudentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -165,6 +176,8 @@ class TaskSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     students = SSerializer(many=True, read_only=True)
     framer = FramerSerializer(many=False, read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
+
     class Meta:
         model = Project
         fields = '__all__'
