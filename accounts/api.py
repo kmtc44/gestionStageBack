@@ -109,7 +109,6 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
-    
 
 
 class DepartmentAPI(generics.ListCreateAPIView):
@@ -139,7 +138,7 @@ class StudentAPI(viewsets.ModelViewSet):
             student.skills.add(*skills)
 
         if 'skill' in request.data:
-            
+
             skill_id = request.data['skill']
             skill = Skill.objects.get(id=skill_id)
             student.skills.remove(skill)
@@ -153,19 +152,18 @@ class StudentAPI(viewsets.ModelViewSet):
                 student.image = request.data['image']
         if 'phone' in request.data:
             student.phone = request.data["phone"]
-
-        # if 'gender' in request.data:
-        #     student.gender = request.data["gender"]
-        # if 'socialStatus' in request.data:
-        #     student.socialStatus = request.data["socialStatus"]
-        # if 'address' in request.data:
-        #     student.address = request.data["address"]
-        # student.save()
+        if 'gender' in request.data:
+            student.gender = request.data["gender"]
+        if 'socialStatus' in request.data:
+            student.socialStatus = request.data["socialStatus"]
+        if 'address' in request.data:
+            student.address = request.data["address"]
+        student.save()
 
         return Response(StudentSerializer(student).data)
 
 
-class TeacherAPI(generics.ListAPIView):
+class TeacherAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -173,7 +171,7 @@ class TeacherAPI(generics.ListAPIView):
     serializer_class = TeacherSerializer
 
 
-class FramerAPI(generics.ListAPIView):
+class FramerAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
@@ -205,6 +203,36 @@ class SkillViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all().order_by('-id')
     serializer_class = TaskSerializer
+    
+    def create(self, request):
+        title = request.data['title']
+        description = request.data['description']
+        framer = Framer.objects.get(id=request.data['framer'])
+        task = Task.objects.create(
+            title=title, description=description, framer=framer)
+        
+        if 'project' in request.data:
+            project = Project.objects.get(id=request.data['project']) 
+            task.project = project
+        if 'starting_time' in request.data:
+            task.starting_time = request.data['starting_time']
+        if 'finish_time' in request.data :
+            task.finish_time = request.data['finish_time']
+            
+        task.save()
+
+        for id in request.data['students']:
+            task.students.add(Student.objects.get(id=id))
+
+        return Response(TaskSerializer(task).data)
+
+    def update(self, request, pk):
+        task = Task.objects.get(id=pk)
+        state = request.data['state']
+        task.state = state 
+        task.save()
+        
+        return Response(TaskSerializer(task).data)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -212,14 +240,21 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def create(self, request):
-        print(request.data)
         name = request.data['name']
         description = request.data['description']
-        aim = request.data['aim']
-        enterprise = Enterprise.objects.get(id=request.data['enterprise'])
+        aim = request.data['aim']        
+        enterprise = Enterprise.objects.get(id=request.data['enterprise']) 
         framer = Framer.objects.get(id=request.data['framer'])
         pro = Project.objects.create(
             name=name, description=description, aim=aim, framer=framer, enterprise=enterprise)
+        
+        
+                 
+        if 'starting_time' in request.data:
+            pro.starting_time = request.data['starting_time']
+        if 'finish_time' in request.data :
+            pro.finish_time = request.data['finish_time']
+
         pro.save()
 
         for id in request.data['students']:

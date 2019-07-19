@@ -8,6 +8,8 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('students', StudentAPI, 'student')
+router.register('teachers', TeacherAPI, 'teacher')
+router.register('framers', FramerAPI, 'framer')
 
 router.register('skills',SkillViewSet , 'skills')
 
@@ -24,8 +26,8 @@ urlpatterns = [
     path('auth/users', UsersAPI.as_view()),
     path('auth/user', UserAPI.as_view()),
     path('auth/logout', knox_views.LogoutView.as_view(), name="knox_logout"),
-    path('teachers', TeacherAPI.as_view()),
-    path('framers', FramerAPI.as_view()),
+    # path('teachers', TeacherAPI.as_view()),
+    # path('framers', FramerAPI.as_view()),
     path('promos', PromotionAPI.as_view()),
     path('department', DepartmentAPI.as_view()),
     # path('classroom', ClassroomAPI.as_view()),
