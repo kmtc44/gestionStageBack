@@ -154,13 +154,13 @@ class StudentAPI(viewsets.ModelViewSet):
         if 'phone' in request.data:
             student.phone = request.data["phone"]
 
-        # if 'gender' in request.data:
-        #     student.gender = request.data["gender"]
-        # if 'socialStatus' in request.data:
-        #     student.socialStatus = request.data["socialStatus"]
-        # if 'address' in request.data:
-        #     student.address = request.data["address"]
-        # student.save()
+        if 'gender' in request.data:
+            student.gender = request.data["gender"]
+        if 'socialStatus' in request.data:
+            student.socialStatus = request.data["socialStatus"]
+        if 'address' in request.data:
+            student.address = request.data["address"]
+        student.save()
 
         return Response(StudentSerializer(student).data)
 
