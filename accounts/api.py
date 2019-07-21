@@ -8,10 +8,13 @@ from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project, Skill
+from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project, Skill, Attachments
 from .serializers import (FramerSerializer, LoginSerializer,
                           PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, SkillSerializer, ProjectSerializer)
+                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer,
+                           TaskSerializer, SkillSerializer, ProjectSerializer, AttachmentsSerializer)
+
+
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -152,10 +155,7 @@ class StudentAPI(viewsets.ModelViewSet):
                 student.image = request.data['image']
         if 'phone' in request.data:
             student.phone = request.data["phone"]
-<<<<<<< HEAD
 
-=======
->>>>>>> 4276eca38943f8f203595813dce1eb3fce5bc65b
         if 'gender' in request.data:
             student.gender = request.data["gender"]
         if 'socialStatus' in request.data:
@@ -265,3 +265,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             pro.students.add(Student.objects.get(id=id))
 
         return Response(ProjectSerializer(pro).data)
+
+class AttachmentsViewSet(viewsets.ModelViewSet):
+    parser_class = (FileUploadParser,)
+    queryset = Attachments.objects.all().order_by('-id')
+    serializer_class = AttachmentsSerializer

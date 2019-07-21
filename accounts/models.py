@@ -25,17 +25,7 @@ TASK_STATE = (
     ('Finish', 'Finish')
 )
 
-SocialStatus = (
-        ('CSE', 'Célibataire sans enfants'),
-        ('CAE', 'Célibataire avec enfants'),
-        ('MSE', 'Marié(e) sans enfants'),
-        ('MAE', 'Marié(e) avec enfants'),
-    )
 
-Genre=(
-        ('M', 'Masculin'),
-        ('F', 'Féminin'),
-    )
 
 class Promotion(models.Model):
     name = models.CharField(max_length=50, default="")
@@ -87,8 +77,6 @@ class Student(models.Model):
     skills = models.ManyToManyField(Skill, related_name="students")
 
     birthday = models.DateField(null=True)
-
-
     def __str__(self):
         return self.status + " : =>  " + self.first_name + " " + self.last_name
 
@@ -156,3 +144,7 @@ class Task(models.Model):
     def __str__(self):
         return self.title + ":  " + self.description
 
+class Attachments(models.Model):
+    rapport = models.FileField(upload_to='rapport/', null=True)
+    cv = models.FileField(upload_to='cv/', null=True)
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, null=False)

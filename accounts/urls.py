@@ -1,5 +1,5 @@
 from .api import (FramerAPI, LoginAPI, PromotionAPI, RegisterAPI, StudentAPI,
-                  TeacherAPI, UserAPI, UsersAPI, ClassroomAPI, TaskViewSet, ProjectViewSet, SkillViewSet)
+                  TeacherAPI, UserAPI, UsersAPI, ClassroomAPI, TaskViewSet, ProjectViewSet, SkillViewSet, AttachmentsViewSet)
 
 from accounts.api import DepartmentAPI
 from django.urls import include, path
@@ -16,6 +16,7 @@ router.register('skills',SkillViewSet , 'skills')
 router.register('classroom', ClassroomAPI, 'classroom')
 router.register('task', TaskViewSet, 'task')
 router.register('project', ProjectViewSet, 'project')
+router.register('attachments', AttachmentsViewSet, 'attachments')
 
 
 

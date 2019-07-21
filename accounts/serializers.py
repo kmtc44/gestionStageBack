@@ -7,8 +7,7 @@ from rest_framework.serializers import ModelSerializer
 # from internship.serializers import EnterpriseSerializers
 from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill
-
+from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill, Attachments
 
 # serializer that are not use directy but allow inly for nested data
 
@@ -108,6 +107,12 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'students')
 
 
+class AttachmentsSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Attachments
+        fields = '__all__' 
+
 class StudentSerializer(serializers.ModelSerializer):
     skills = SkSerializer(many=True, read_only=True)
     user = UserSerializer(many=False, read_only=True)
@@ -115,6 +120,7 @@ class StudentSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer(many=False, read_only=True)
     projects = ProjSerializer(many=True, read_only=True)
     classroom = CRSerializer(many=False, read_only=True)
+    attachments = AttachmentsSerializer(many=False, read_only=True)
 
     class Meta:
         model = Student
@@ -181,3 +187,4 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
+
