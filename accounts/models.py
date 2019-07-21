@@ -144,7 +144,33 @@ class Task(models.Model):
     def __str__(self):
         return self.title + ":  " + self.description
 
+<<<<<<< HEAD
 class Attachments(models.Model):
     rapport = models.FileField(upload_to='rapport/', null=True)
     cv = models.FileField(upload_to='cv/', null=True)
     student = models.OneToOneField(Student, on_delete=models.CASCADE, null=False)
+=======
+class Comment(models.Model):
+    comment = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments', null=True)
+    commented_at = models.DateTimeField(auto_now_add=True, null=True)    
+
+
+    def __str__(self):
+        return self.comment
+
+
+
+# class Notification(models.Model):
+#     title = models.CharField(max_length=100)
+#     from_ = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+#     to = models.ManyToManyField(User, on_delete=models.CASCADE)
+#     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='notifs', null=True)
+#     projet = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='notifs', null=True)
+#     # read = models.BooleanField(default=False)
+#     read = models.ManyToManyField(User)
+
+#     def __str__(self):
+#         return self.title 
+>>>>>>> 83f89c3a182e50afc7d97ac8675ef354911f97b4

@@ -7,7 +7,23 @@ from rest_framework.serializers import ModelSerializer
 # from internship.serializers import EnterpriseSerializers
 from internship.models import Enterprise
 
+<<<<<<< HEAD
 from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill, Attachments
+=======
+from .models import (
+    Framer, 
+    Promotion, 
+    Student, 
+    Teacher, 
+    Department, 
+    Classroom, 
+    Task, 
+    Project, 
+    Skill,
+    Comment
+)
+
+>>>>>>> 83f89c3a182e50afc7d97ac8675ef354911f97b4
 
 # serializer that are not use directy but allow inly for nested data
 
@@ -46,6 +62,13 @@ class CRSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Classroom
+        fields = ('id', 'name')
+
+class PromoSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = Promotion
         fields = ('id', 'name')
 # real serializer  that are used buy the api view to serve or receive data
 
@@ -120,7 +143,11 @@ class StudentSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer(many=False, read_only=True)
     projects = ProjSerializer(many=True, read_only=True)
     classroom = CRSerializer(many=False, read_only=True)
+<<<<<<< HEAD
     attachments = AttachmentsSerializer(many=False, read_only=True)
+=======
+    promotion = PromoSerializer(many=False, read_only=True)
+>>>>>>> 83f89c3a182e50afc7d97ac8675ef354911f97b4
 
     class Meta:
         model = Student
@@ -171,8 +198,15 @@ class ClassroomSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'students')
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserSerializer(many=False, read_only=True)
+    class Meta:
+        model = Comment 
+        fields = '__all__'
+
 class TaskSerializer(serializers.ModelSerializer):
     students = StudentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -188,3 +222,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = '__all__'
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 83f89c3a182e50afc7d97ac8675ef354911f97b4
