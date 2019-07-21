@@ -8,10 +8,32 @@ from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
 from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Classroom, Task, Project, Skill
-from .serializers import (FramerSerializer, LoginSerializer,
-                          PromotionSerializer, RegisterSerializer,
-                          StudentSerializer, TeacherSerializer, UserSerializer, ClassroomSerializer, TaskSerializer, SkillSerializer, ProjectSerializer)
+from .models import (
+    Framer, 
+    Promotion, 
+    Student, 
+    Teacher, 
+    Classroom, 
+    Task, 
+    Project, 
+    Skill,
+    Comment,
+    # Notification
+)
+from .serializers import (
+    FramerSerializer, 
+    LoginSerializer,
+    PromotionSerializer, 
+    RegisterSerializer,
+    StudentSerializer, 
+    TeacherSerializer, 
+    UserSerializer, 
+    ClassroomSerializer, 
+    TaskSerializer, 
+    SkillSerializer, 
+    ProjectSerializer,
+    CommentSerializer
+)
 
 
 class RegisterAPI(generics.GenericAPIView):
@@ -247,9 +269,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         framer = Framer.objects.get(id=request.data['framer'])
         pro = Project.objects.create(
             name=name, description=description, aim=aim, framer=framer, enterprise=enterprise)
-        
-        
-                 
+
         if 'starting_time' in request.data:
             pro.starting_time = request.data['starting_time']
         if 'finish_time' in request.data :
@@ -261,3 +281,17 @@ class ProjectViewSet(viewsets.ModelViewSet):
             pro.students.add(Student.objects.get(id=id))
 
         return Response(ProjectSerializer(pro).data)
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by('-id')
+    serializer_class = CommentSerializer
+
+    def create(self, request):
+        content = request.data['comment']
+        author = User.objects.get(id=request.data['author'])
+        task = Task.objects.get(id=request.data['task'])
+
+        comment = Comment.objects.create(comment=content, author=author, task=task)
+        comment.save()
+        return Response(CommentSerializer(comment).data)

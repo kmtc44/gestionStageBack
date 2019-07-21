@@ -5,6 +5,7 @@ from internship.serializers import EnterpriseSerializers, ConventionSerializer
 from rest_framework.response import Response
 
 from .models import Enterprise, Convention
+from django.db.models import Q
 
 from accounts.models import Student
 
@@ -14,6 +15,16 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
     parser_class = (FileUploadParser,)
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = EnterpriseSerializers
+
+    def get_queryset(self):
+        queryset_search = Enterprise.objects.all().order_by('-id')
+        query = self.request.GET.get('search')
+        if query:
+            queryset_search = queryset_search.filter(
+                Q(name__icontains=query)
+            ).distinct()
+        return queryset_search
+        
 
     def update(self, request, pk):
 
@@ -61,6 +72,8 @@ class EnterprisePotentialView(generics.ListAPIView):
 class ConventionViewSet(viewsets.ModelViewSet):
     queryset = Convention.objects.all().order_by('-id')
     serializer_class = ConventionSerializer
+
+
 
     def create(self, request, *args, **kwargs):
         print(request.data)

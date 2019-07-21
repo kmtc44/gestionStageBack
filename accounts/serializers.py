@@ -7,7 +7,18 @@ from rest_framework.serializers import ModelSerializer
 # from internship.serializers import EnterpriseSerializers
 from internship.models import Enterprise
 
-from .models import Framer, Promotion, Student, Teacher, Department, Classroom, Task, Project, Skill
+from .models import (
+    Framer, 
+    Promotion, 
+    Student, 
+    Teacher, 
+    Department, 
+    Classroom, 
+    Task, 
+    Project, 
+    Skill,
+    Comment
+)
 
 
 # serializer that are not use directy but allow inly for nested data
@@ -47,6 +58,13 @@ class CRSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Classroom
+        fields = ('id', 'name')
+
+class PromoSerializer(serializers.ModelSerializer):
+    
+
+    class Meta:
+        model = Promotion
         fields = ('id', 'name')
 # real serializer  that are used buy the api view to serve or receive data
 
@@ -115,6 +133,7 @@ class StudentSerializer(serializers.ModelSerializer):
     department = DepartmentSerializer(many=False, read_only=True)
     projects = ProjSerializer(many=True, read_only=True)
     classroom = CRSerializer(many=False, read_only=True)
+    promotion = PromoSerializer(many=False, read_only=True)
 
     class Meta:
         model = Student
@@ -165,8 +184,15 @@ class ClassroomSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'students')
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserSerializer(many=False, read_only=True)
+    class Meta:
+        model = Comment 
+        fields = '__all__'
+
 class TaskSerializer(serializers.ModelSerializer):
     students = StudentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -181,3 +207,5 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = '__all__'
+
+
