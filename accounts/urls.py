@@ -5,20 +5,20 @@ from rest_framework import routers
 
 from .api import (ClassroomAPI, FramerAPI, LoginAPI, ProjectViewSet,
                   PromotionAPI, RegisterAPI, SkillViewSet, StudentAPI,
-                  TaskViewSet, TeacherAPI, UserAPI, UsersAPI, CommentViewSet, DepartmentAPI)
+                  TaskViewSet, TeacherAPI, UserAPI, UsersAPI, CommentViewSet, DepartmentAPI, AttachmentsViewSet)
 
 router = routers.DefaultRouter()
 router.register('students', StudentAPI, 'student')
 router.register('teachers', TeacherAPI, 'teacher')
 router.register('framers', FramerAPI, 'framer')
 
-router.register('skills',SkillViewSet , 'skills')
+router.register('skills', SkillViewSet, 'skills')
 
 router.register('classroom', ClassroomAPI, 'classroom')
 router.register('task', TaskViewSet, 'task')
 router.register('project', ProjectViewSet, 'project')
-router.register('comments', CommentViewSet, 'comments')
 
+router.register('comments', CommentViewSet, 'comments')
 
 
 urlpatterns = [

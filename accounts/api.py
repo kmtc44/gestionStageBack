@@ -18,6 +18,7 @@ from .models import (
     Project, 
     Skill,
     Comment,
+    Attachments
     # Notification
 )
 from .serializers import (
@@ -32,7 +33,8 @@ from .serializers import (
     TaskSerializer, 
     SkillSerializer, 
     ProjectSerializer,
-    CommentSerializer
+    CommentSerializer,
+    AttachmentsSerializer
 )
 
 
@@ -282,6 +284,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         return Response(ProjectSerializer(pro).data)
 
+class AttachmentsViewSet(viewsets.ModelViewSet):
+    parser_class = (FileUploadParser,)
+    queryset = Attachments.objects.all().order_by('-id')
+    serializer_class = AttachmentsSerializer
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all().order_by('-id')
