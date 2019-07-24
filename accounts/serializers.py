@@ -16,8 +16,11 @@ from .models import (
     Task,
     Project,
     Skill,
-    Comment,
-    Attachments
+    TaskComment,
+    Attachments,
+    ConventionMesage,
+    RapportComment,
+    Notification
 )
 
 
@@ -54,6 +57,12 @@ class EnterpriseSerializers(serializers.ModelSerializer):
 # classroom for student
 
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+
+
 class CRSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -73,10 +82,11 @@ class PromoSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    receivedNotif = NotificationSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'student')
+        fields = ('id', 'username', 'email', 'student','receivedNotif')
 
 # Register Serializer
 
@@ -192,17 +202,25 @@ class ClassroomSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'students')
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class TaskCommentSerializer(serializers.ModelSerializer):
     author = UserSerializer(many=False, read_only=True)
 
     class Meta:
-        model = Comment
+        model = TaskComment
+        fields = '__all__'
+
+
+class RapportCommentSerializer(serializers.ModelSerializer):
+    author = UserSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = RapportComment
         fields = '__all__'
 
 
 class TaskSerializer(serializers.ModelSerializer):
     students = StudentSerializer(many=True, read_only=True)
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = TaskCommentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Task
@@ -216,4 +234,10 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
+        fields = '__all__'
+
+
+class ConventionMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConventionMesage
         fields = '__all__'
