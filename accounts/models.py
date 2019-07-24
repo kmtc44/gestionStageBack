@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from internship.models import Enterprise
+from internship.models import Enterprise, Convention
 
 # Create your models here.
 
@@ -155,7 +155,7 @@ class Attachments(models.Model):
         Student, on_delete=models.CASCADE, null=False)
 
 
-class Comment(models.Model):
+class TaskComment(models.Model):
     comment = models.TextField()
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='comments')
@@ -167,14 +167,43 @@ class Comment(models.Model):
         return self.comment
 
 
-# class Notification(models.Model):
-#     title = models.CharField(max_length=100)
-#     from_ = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
-#     to = models.ManyToManyField(User, on_delete=models.CASCADE)
-#     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='notifs', null=True)
-#     projet = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='notifs', null=True)
-#     # read = models.BooleanField(default=False)
-#     read = models.ManyToManyField(User)
+class RapportComment(models.Model):
+    comment = models.TextField()
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='comments_rapport')
+    student = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name='rapport_comments', null=True)
+    commented_at = models.DateTimeField(auto_now_add=True, null=True)
 
-#     def __str__(self):
-#         return self.title
+    def __str__(self):
+        return self.comment
+
+
+class ConventionMesage(models.Model):
+    content = models.CharField(max_length=500, null=False)
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='convMessage')
+    sender_status = models.CharField(max_length=10, default="")
+    sended_at = models.DateTimeField(auto_now_add=True, null=True)
+    convention = models.ForeignKey(
+        Convention, on_delete=models.CASCADE, related_name="messages")
+
+    def __str__(self):
+        return self.sender_status + self.content
+
+
+class Notification(models.Model):
+    title = models.CharField(max_length=100)
+    userFrom = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='notifications')
+    to = models.ManyToManyField(User, related_name="receivedNotif")
+    task = models.ForeignKey(
+        Task, on_delete=models.CASCADE, related_name='notifs', null=True)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name='notifs', null=True)
+    rapport_student = models.ForeignKey(
+        Student, on_delete=models.CASCADE, related_name='notifs', null=True)
+    read = models.ManyToManyField(User, related_name="readedNotif")
+
+    def __str__(self):
+        return self.title

@@ -3,40 +3,65 @@ from rest_framework.parsers import FileUploadParser
 from knox.models import AuthToken
 from rest_framework import generics, permissions, viewsets
 from rest_framework.response import Response
+from django.db.models import Q
 
 from accounts.models import Department
 from accounts.serializers import DepartmentSerializer
-from internship.models import Enterprise
+from internship.models import Enterprise, Convention
 
 from .models import (
-    Framer, 
-    Promotion, 
-    Student, 
-    Teacher, 
-    Classroom, 
-    Task, 
-    Project, 
+    Framer,
+    Promotion,
+    Student,
+    Teacher,
+    Classroom,
+    Task,
+    Project,
     Skill,
-    Comment,
-    Attachments
-    # Notification
+    TaskComment,
+    Attachments,
+    ConventionMesage,
+    RapportComment,
+    Notification
 )
 from .serializers import (
-    FramerSerializer, 
+    FramerSerializer,
     LoginSerializer,
-    PromotionSerializer, 
+    PromotionSerializer,
     RegisterSerializer,
-    StudentSerializer, 
-    TeacherSerializer, 
-    UserSerializer, 
-    ClassroomSerializer, 
-    TaskSerializer, 
-    SkillSerializer, 
+    StudentSerializer,
+    TeacherSerializer,
+    UserSerializer,
+    ClassroomSerializer,
+    TaskSerializer,
+    SkillSerializer,
     ProjectSerializer,
-    CommentSerializer,
-    AttachmentsSerializer
+    TaskCommentSerializer,
+    AttachmentsSerializer,
+    ConventionMessageSerializer,
+    RapportCommentSerializer,
+    NotificationSerializer
 )
 
+
+def notify(title, from_, to=[], taskId=None, projectId=None, rapport_studentId=None):
+    UserFrom_ = User.objects.get(id=from_)
+    UsersTo = [User.objects.get(id=id) for id in to]
+    notification = Notification.objects.create(title=title, userFrom=UserFrom_)
+    notification.save()
+    notification.to.add(*UsersTo)
+    if projectId:
+        project = Project.objects.get(id=projectId)
+        notification.project = project
+    elif taskId :
+        task = Task.objects.get(id=taskId)
+        notification.task = task
+    elif rapport_studentId:
+        rapport_student = Student.objects.get(id)
+        notification.rapport_student = rapport_student    
+    
+    notification.save()
+    
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -147,9 +172,18 @@ class StudentAPI(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated
     ]
-    queryset = Student.objects.all()
     serializer_class = StudentSerializer
     parser_class = (FileUploadParser,)
+
+    def get_queryset(self):
+        queryset_search = Student.objects.all()
+        query = self.request.GET.get('search')
+        print(query)
+        if query:
+            queryset_search = queryset_search.filter(
+                Q(first_name__icontains=query)
+            ).distinct()
+        return queryset_search
 
     def update(self, request, pk):
         student = Student.objects.get(id=pk)
@@ -227,7 +261,7 @@ class SkillViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all().order_by('-id')
     serializer_class = TaskSerializer
-    
+
     def create(self, request):
         title = request.data['title']
         description = request.data['description']
@@ -236,26 +270,62 @@ class TaskViewSet(viewsets.ModelViewSet):
             title=title, description=description, framer=framer)
         
         if 'project' in request.data:
-            project = Project.objects.get(id=request.data['project']) 
+            project = Project.objects.get(id=request.data['project'])
             task.project = project
         if 'starting_time' in request.data:
             task.starting_time = request.data['starting_time']
-        if 'finish_time' in request.data :
+        if 'finish_time' in request.data:
             task.finish_time = request.data['finish_time']
-            
+
         task.save()
 
+        # sending notification 
+        UserToNotify = []
         for id in request.data['students']:
-            task.students.add(Student.objects.get(id=id))
+            student = Student.objects.get(id=id)
+            UserToNotify.append(student.user.id)
+            task.students.add(student)
+        git = Department.objects.get(name="GIT")
+        teachers = Teacher.objects.filter(department=git)
+        UserToNotify += [teacher.user.id for teacher in teachers]
+        
 
+        title_notification = "Creation d'une nouvelle tache : " + title
+        if 'project' in request.data:
+            notify(title_notification, framer.user.id, UserToNotify, task.id, project.id)
+        else :
+            notify(title_notification, framer.user.id, UserToNotify, task.id)
         return Response(TaskSerializer(task).data)
 
     def update(self, request, pk):
         task = Task.objects.get(id=pk)
+        userId = request.data["user"]
         state = request.data['state']
-        task.state = state 
+        task.state = state
         task.save()
-        
+
+        # Sending notification 
+        git = Department.objects.get(name="GIT")
+        teachers = Teacher.objects.filter(department=git)
+        UserToNotify = [teacher.user.id for teacher in teachers]
+
+        user = User.objects.get(id=userId)
+        fromm = ''
+        status = ''
+        framer = Framer.objects.filter(user=user)
+        if len(framer) > 0 :           
+            fromm = user.framer.first_name + " " + user.framer.last_name
+            status = 'Encadreur '
+            for student in task.students.all():
+                UserToNotify.append(student.user.id)
+        else :
+            fromm = user.student.first_name + " " + user.student.last_name
+            status = "Eleve"
+            UserToNotify.append(task.framer.user.id)
+
+        title_notification = "La tache " + task.title + " est deplacee en " + state + " par " + status + " : " + fromm 
+        notify(title_notification, userId, UserToNotify, task.id)
+
         return Response(TaskSerializer(task).data)
 
 
@@ -266,38 +336,91 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def create(self, request):
         name = request.data['name']
         description = request.data['description']
-        aim = request.data['aim']        
-        enterprise = Enterprise.objects.get(id=request.data['enterprise']) 
+        aim = request.data['aim']
+        enterprise = Enterprise.objects.get(id=request.data['enterprise'])
         framer = Framer.objects.get(id=request.data['framer'])
         pro = Project.objects.create(
             name=name, description=description, aim=aim, framer=framer, enterprise=enterprise)
 
         if 'starting_time' in request.data:
             pro.starting_time = request.data['starting_time']
-        if 'finish_time' in request.data :
+        if 'finish_time' in request.data:
             pro.finish_time = request.data['finish_time']
 
         pro.save()
 
         for id in request.data['students']:
             pro.students.add(Student.objects.get(id=id))
+        
+
+        #send notification 
+
+        title_notification = "Une nouvelle tache vous a ete assignee : " + title
+        notify(title_notification, framer.user.id, userStudentId, task.id)
 
         return Response(ProjectSerializer(pro).data)
+
 
 class AttachmentsViewSet(viewsets.ModelViewSet):
     parser_class = (FileUploadParser,)
     queryset = Attachments.objects.all().order_by('-id')
     serializer_class = AttachmentsSerializer
 
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all().order_by('-id')
-    serializer_class = CommentSerializer
+
+class TaskCommentViewSet(viewsets.ModelViewSet):
+    queryset = TaskComment.objects.all().order_by('-id')
+    serializer_class = TaskCommentSerializer
 
     def create(self, request):
         content = request.data['comment']
         author = User.objects.get(id=request.data['author'])
         task = Task.objects.get(id=request.data['task'])
 
-        comment = Comment.objects.create(comment=content, author=author, task=task)
+        comment = TaskComment.objects.create(
+            comment=content, author=author, task=task)
         comment.save()
-        return Response(CommentSerializer(comment).data)
+        return Response(TaskCommentSerializer(comment).data)
+
+
+class RapportCommentViewSet(viewsets.ModelViewSet):
+    serializer_class = RapportCommentSerializer
+
+    def get_queryset(self):
+        queryset_comment = RapportComment.objects.all()
+        query = self.request.GET.get('studentId')
+        if query:
+            student = Student.objects.get(id=query)
+            queryset_comment = queryset_comment.filter(student=student)
+        return queryset_comment
+
+    def create(self, request):
+        content = request.data['comment']
+        author = User.objects.get(id=request.data['author'])
+        student = Student.objects.get(id=request.data['student'])
+
+        comment = RapportComment.objects.create(
+            comment=content, author=author, student=student)
+        comment.save()
+        return Response(RapportCommentSerializer(comment).data)
+
+class ConventionMessageViewSet(viewsets.ModelViewSet):
+    serializer_class = ConventionMessageSerializer
+
+    def get_queryset(self):
+        queryset_msg = ConventionMesage.objects.all()
+        query = self.request.GET.get('convID')
+        if query:
+            convention = Convention.objects.get(id=query)
+            queryset_msg = queryset_msg.filter(convention=convention)
+        return queryset_msg
+
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+
+    def get_queryset(self):
+        queryset_msg = Notification.objects.all()
+        query = self.request.GET.get('userID')
+        if query:
+            convention = Notification.objects.get(id=query)
+            queryset_msg = queryset_msg.filter(convention=convention)
+        return queryset_msg

@@ -19,6 +19,8 @@ class Enterprise(models.Model):
     leader_name = models.CharField(max_length=50, default="")
     is_partner = models.BooleanField(default=False)
     add_date = models.DateTimeField(auto_now_add=True)
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
 
     def __str__(self):
         return self.name
