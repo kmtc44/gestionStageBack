@@ -20,7 +20,7 @@ from .models import (
     Skill,
     TaskComment,
     Attachments,
-    ConventionMesage,
+    ConventionMessage,
     RapportComment,
     Notification
 )
@@ -44,7 +44,7 @@ from .serializers import (
 )
 
 
-def notify(title, from_, to=[], taskId=None, projectId=None, rapport_studentId=None):
+def notify(title, from_, to, taskId=None, projectId=None, rapport_studentId=None):
     UserFrom_ = User.objects.get(id=from_)
     UsersTo = [User.objects.get(id=id) for id in to]
     notification = Notification.objects.create(title=title, userFrom=UserFrom_)
@@ -53,15 +53,15 @@ def notify(title, from_, to=[], taskId=None, projectId=None, rapport_studentId=N
     if projectId:
         project = Project.objects.get(id=projectId)
         notification.project = project
-    elif taskId :
+    if taskId:
         task = Task.objects.get(id=taskId)
         notification.task = task
-    elif rapport_studentId:
-        rapport_student = Student.objects.get(id)
-        notification.rapport_student = rapport_student    
-    
+    if rapport_studentId:
+        rapport_student = Student.objects.get(id=rapport_studentId)
+        notification.rapport_student = rapport_student
+
     notification.save()
-    
+
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -259,7 +259,7 @@ class SkillViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all().order_by('-id')
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
     def create(self, request):
@@ -268,7 +268,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         framer = Framer.objects.get(id=request.data['framer'])
         task = Task.objects.create(
             title=title, description=description, framer=framer)
-        
+
         if 'project' in request.data:
             project = Project.objects.get(id=request.data['project'])
             task.project = project
@@ -279,7 +279,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
         task.save()
 
-        # sending notification 
+        # sending notification
         UserToNotify = []
         for id in request.data['students']:
             student = Student.objects.get(id=id)
@@ -288,12 +288,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         git = Department.objects.get(name="GIT")
         teachers = Teacher.objects.filter(department=git)
         UserToNotify += [teacher.user.id for teacher in teachers]
-        
 
         title_notification = "Creation d'une nouvelle tache : " + title
         if 'project' in request.data:
-            notify(title_notification, framer.user.id, UserToNotify, task.id, project.id)
-        else :
+            notify(title_notification, framer.user.id,
+                   UserToNotify, task.id, project.id)
+        else:
             notify(title_notification, framer.user.id, UserToNotify, task.id)
         return Response(TaskSerializer(task).data)
 
@@ -304,7 +304,7 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.state = state
         task.save()
 
-        # Sending notification 
+        # Sending notification
         git = Department.objects.get(name="GIT")
         teachers = Teacher.objects.filter(department=git)
         UserToNotify = [teacher.user.id for teacher in teachers]
@@ -313,25 +313,36 @@ class TaskViewSet(viewsets.ModelViewSet):
         fromm = ''
         status = ''
         framer = Framer.objects.filter(user=user)
-        if len(framer) > 0 :           
+        if len(framer) > 0:
             fromm = user.framer.first_name + " " + user.framer.last_name
             status = 'Encadreur '
             for student in task.students.all():
                 UserToNotify.append(student.user.id)
-        else :
+        else:
             fromm = user.student.first_name + " " + user.student.last_name
             status = "Eleve"
             UserToNotify.append(task.framer.user.id)
 
-        title_notification = "La tache " + task.title + " est deplacee en " + state + " par " + status + " : " + fromm 
-        notify(title_notification, userId, UserToNotify, task.id)
-
+        title_notification = "La tache " + task.title + \
+            " est deplacee en " + state + " par " + status + " : " + fromm
+        if task.project:
+            notify(title_notification, userId,
+                   UserToNotify, task.id, task.project.id)
+        else:
+            notify(title_notification, userId, UserToNotify, task.id)
         return Response(TaskSerializer(task).data)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    queryset = Project.objects.all().order_by('-id')
     serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        queryset_project = Project.objects.all().order_by('-id')
+        query = self.request.GET.get('framerId')
+        if query:
+            framer = Framer.objects.get(id=query)
+            queryset_project = queryset_project.filter(framer=framer)
+        return queryset_project
 
     def create(self, request):
         name = request.data['name']
@@ -351,9 +362,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         for id in request.data['students']:
             pro.students.add(Student.objects.get(id=id))
-        
 
-        #send notification 
+        # send notification
 
         title_notification = "Une nouvelle tache vous a ete assignee : " + title
         notify(title_notification, framer.user.id, userStudentId, task.id)
@@ -401,19 +411,66 @@ class RapportCommentViewSet(viewsets.ModelViewSet):
         comment = RapportComment.objects.create(
             comment=content, author=author, student=student)
         comment.save()
+
+        # notify
+        git = Department.objects.get(name="GIT")
+        title_notification = ''
+        UserToNotify = []
+        framer = Framer.objects.filter(user=author)
+        teacher = Teacher.objects.filter(user=author)
+
+        if len(framer) > 0:
+            fromm = author.framer.first_name + " " + author.framer.last_name
+            title_notification = "L'encadreur " + fromm + " a commenter le rapport de " + \
+                student.first_name + " " + student.last_name
+            teachers = Teacher.objects.filter(department=git)
+            UserToNotify += [teacher.user.id for teacher in teachers]
+            UserToNotify.append(student.user.id)
+        elif len(teacher) > 0:
+            fromm = author.teacher.first_name + " " + author.teacher.last_name
+            title_notification = "Le professeur " + fromm + \
+                " a commente le rapport de " + student.first_name + " " + student.last_name
+            teachers = Teacher.objects.filter(
+                department=git).exclude(id=author.teacher.id)
+            UserToNotify += [teacher.user.id for teacher in teachers]
+            UserToNotify.append(student.user.id)
+            framers = Framer.objects.filter(enterprise=student.enterprise)
+            UserToNotify += [framer.user.id for framer in framers]
+
+        else:
+            fromm = author.student.first_name + " " + author.student.last_name
+            title_notification = "L'eleve " + fromm + " a commenter son rapport de stage "
+            framers = Framer.objects.filter(enterprise=student.enterprise)
+            UserToNotify += [framer.user.id for framer in framers]
+            teachers = Teacher.objects.filter(department=git)
+            UserToNotify += [teacher.user.id for teacher in teachers]
+
+        notify(title_notification, author.id,
+               UserToNotify, rapport_studentId=student.id)
+
         return Response(RapportCommentSerializer(comment).data)
+
 
 class ConventionMessageViewSet(viewsets.ModelViewSet):
     serializer_class = ConventionMessageSerializer
 
     def get_queryset(self):
-        queryset_msg = ConventionMesage.objects.all()
+        queryset_msg = ConventionMessage.objects.all()
         query = self.request.GET.get('convID')
         if query:
             convention = Convention.objects.get(id=query)
             queryset_msg = queryset_msg.filter(convention=convention)
         return queryset_msg
 
+    def create(self, request):
+        content = request.data['content']
+        sender = User.objects.get(id=request.data['sender'])
+        convention = Convention.objects.get(id=request.data['convention'])
+        sender_status = request.data['sender_status']
+        conv_message = ConventionMessage.objects.create(content=content, sender=sender, convention=convention, sender_status=sender_status)
+        conv_message.save()
+
+        return Response(ConventionMessageSerializer(conv_message).data)
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
 
@@ -424,3 +481,14 @@ class NotificationViewSet(viewsets.ModelViewSet):
             convention = Notification.objects.get(id=query)
             queryset_msg = queryset_msg.filter(convention=convention)
         return queryset_msg
+
+    def update(self, request, pk):
+        notification = Notification.objects.get(id=pk)
+
+        user = User.objects.get(id=request.data['read'])
+        notification.to.remove(user)
+        notification.read.add(user)
+
+        notification.save()
+
+        return Response(NotificationSerializer(notification).data)

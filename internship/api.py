@@ -76,7 +76,6 @@ class ConventionViewSet(viewsets.ModelViewSet):
 
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
         title = request.data['title']
         life_time = request.data['life_time']
         state = request.data['state']
@@ -85,4 +84,14 @@ class ConventionViewSet(viewsets.ModelViewSet):
         convention = Convention(
             title=title, enterprise=enterprise, life_time=life_time, state=state)
         convention.save()
+        return Response(ConventionSerializer(convention).data)
+
+    def update(self, request, pk):
+        convention = Convention.objects.get(id=pk)
+
+        if 'life_time' in request.data:
+            convention.life_time = request.data['life_time']
+    
+        convention.save()
+
         return Response(ConventionSerializer(convention).data)

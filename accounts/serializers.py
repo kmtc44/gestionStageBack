@@ -18,7 +18,7 @@ from .models import (
     Skill,
     TaskComment,
     Attachments,
-    ConventionMesage,
+    ConventionMessage,
     RapportComment,
     Notification
 )
@@ -86,7 +86,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'student','receivedNotif')
+        fields = ('id', 'username', 'email', 'student', 'receivedNotif')
 
 # Register Serializer
 
@@ -170,6 +170,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 class FramerSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     enterprise = EnterpriseSerializers(many=False, read_only=True)
+    projects = ProjSerializer(many=True, read_only=True)
 
     class Meta:
         model = Framer
@@ -238,6 +239,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ConventionMessageSerializer(serializers.ModelSerializer):
+    sender = UserSerializer(many=False, read_only=True)
+
     class Meta:
-        model = ConventionMesage
+        model = ConventionMessage
         fields = '__all__'

@@ -118,7 +118,7 @@ class Project(models.Model):
     description = models.CharField(max_length=200, default="")
     aim = models.CharField(max_length=300, default="")
     framer = models.ForeignKey(
-        Framer, related_name="my_project", on_delete=models.CASCADE, null=False)
+        Framer, related_name="projects", on_delete=models.CASCADE, null=False)
     enterprise = models.ForeignKey(
         Enterprise, related_name="projects", on_delete=models.CASCADE)
     students = models.ManyToManyField(Student, related_name="projects")
@@ -179,7 +179,7 @@ class RapportComment(models.Model):
         return self.comment
 
 
-class ConventionMesage(models.Model):
+class ConventionMessage(models.Model):
     content = models.CharField(max_length=500, null=False)
     sender = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='convMessage')
@@ -207,3 +207,8 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# class Immersion(models.Model):
+#     enterprise = models.ForeignKey(Enterprise, related_name='immersion', on_delete=CASCADE)
+#     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
